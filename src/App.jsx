@@ -35,46 +35,114 @@ Ao enviar, deve-se apresentar um alert javascript com sucesso, limpar todos os c
 do formulário e zerar a barra de progresso novamente.
 */
 
-function App() {
-  return (
-    <div className='App'>
-      <h3>desafio fernandev</h3>
-      <h1>progresso do formulário</h1>
+import {useState} from "react";
 
-      <main>
-        {/* crie a barra de progresso aqui */}
-        <div className='form-group'>
-          <label htmlFor=''>Nome Completo</label>
-          <input />
-        </div>
-        <div className='form-group'>
-          <label htmlFor=''>E-mail</label>
-          <input />
-        </div>
-        <div className='form-group'>
-          <label htmlFor=''>Estado Civil</label>
-          <select>
-            <option value=''>- selecione...</option>
-            <option value='solteiro'>Solteiro</option>
-            <option value='casado'>Casado</option>
-            <option value='divorciado'>Divorciado</option>
-          </select>
-        </div>
-        <div className='form-group'>
-          <label htmlFor=''>Gênero</label>
-          <div className='radios-container'>
+function App() {
+    const [data, setData] = useState({
+        fullName: '',
+        email: '',
+        maritalStatus: '',
+        genre: '',
+        cpf: ''
+    });
+
+    const handleChange = (event) => {
+        const {name, value} = event.target;
+
+        setData((previous) => {
+            return {...previous, [name]: value}
+        });
+    }
+
+    const handleClick = () => {
+        alert('Formulário enviado com sucesso!');
+        setData({
+            fullName: '',
+            email: '',
+            maritalStatus: '',
+            genre: '',
+            cpf: ''
+        });
+    }
+
+    const calculateProgress = () => {
+        const itemsInForm = Object.keys(data).length;
+        let progress = 0;
+        let valueToAdd = 100/itemsInForm; // 100% dividido pela quantidade de itens no formulário
+
+        if (data.fullName) {
+            const explodeString = data.fullName.split(' ');
+            if (explodeString[1])
+                progress += valueToAdd;
+        }
+
+        if (data.email) {
+            let pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+            if (pattern.test(data.email))
+                progress += valueToAdd;
+        }
+
+        if (data.maritalStatus)
+            progress += valueToAdd;
+
+        if (data.genre)
+            progress += valueToAdd;
+
+        if (data.cpf)
+            progress += valueToAdd;
+
+        return progress;
+    }
+
+    calculateProgress();
+
+    return (
+        <div className='App'>
+            <h3>desafio firmino</h3>
+            <h1>progresso do formulário</h1>
+
+            <main>
+                <div className={'bar-container'}>
+                    <div className={'bar'} style={{width: `${calculateProgress()}%`}}></div>
+                </div>
+                <div className='form-group'>
+                    <label htmlFor=''>Nome Completo</label>
+                    <input name={'fullName'} value={data.fullName} onChange={handleChange}/>
+                </div>
+                <div className='form-group'>
+                    <label htmlFor=''>E-mail</label>
+                    <input name={'email'} value={data.email} onChange={handleChange}/>
+                </div>
+                <div className='form-group'>
+                    <label htmlFor=''>CPF</label>
+                    <input name={'cpf'} value={data.cpf} onChange={handleChange}/>
+                </div>
+                <div className='form-group'>
+                    <label htmlFor=''>Estado Civil</label>
+                    <select name={'maritalStatus'} value={data.maritalStatus} onChange={handleChange}>
+                        <option value=''>- selecione...</option>
+                        <option value='solteiro'>Solteiro</option>
+                        <option value='casado'>Casado</option>
+                        <option value='divorciado'>Divorciado</option>
+                    </select>
+                </div>
+                <div className='form-group'>
+                    <label htmlFor=''>Gênero</label>
+                    <div className='radios-container'>
             <span>
-              <input type='radio' /> Masculino
+              <input type='radio' name={'genre'} value={'masculino'} onChange={handleChange}
+                     checked={data.genre === 'masculino'}/> Masculino
             </span>
-            <span>
-              <input type='radio' /> Feminino
+                        <span>
+              <input type='radio' name={'genre'} value={'feminino'} onChange={handleChange}
+                     checked={data.genre === 'feminino'}/> Feminino
             </span>
-          </div>
+                    </div>
+                </div>
+                <button onClick={handleClick} disabled={calculateProgress() !== 100}>Enviar Formulário</button>
+            </main>
         </div>
-        <button>Enviar Formulário</button>
-      </main>
-    </div>
-  );
+    );
 }
 
 export default App;

@@ -84,28 +84,30 @@ select {
   padding-left: 10px;
   font-family: Verdana;
   font-size: 14px;
-  color: #333;
 }
 button {
   height: 40px;
   width: 100%;
   font-size: 16px;
-  color: #333;
+  color: #eee;
+  background: #646cff;
 }
 
 button:hover {
-  background: #ddd;
+  background: #7f87ef;
   cursor: pointer;
 }
 button:active {
-  background: #333;
-  color: white;
+  background: #646cff;
+  color: #fff;
 }
 button:disabled {
-  color: #aaa;
+  background: #7f87ef;
+  color: #e1dede;
 }
 button:disabled:hover {
-  background: #fafafa;
+  background: #8e94f5;
+  color: #d9d4d4;
 }
 
 .form-group {
